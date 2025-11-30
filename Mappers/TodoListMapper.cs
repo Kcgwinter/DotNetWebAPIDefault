@@ -10,8 +10,17 @@ public static class TodoListMapper
     {
         return new TodoListDto
         {
+            Id = todoListModel.Id,
             Name = todoListModel.Name,
             Todos = todoListModel.Todos
+        };
+    }
+
+    public static TodoList toTodoListFromCreate(this CreateTodoListRequestDto createTodoListDto)
+    {
+        return new TodoList
+        {
+            Name = createTodoListDto.Name
         };
     }
 }
