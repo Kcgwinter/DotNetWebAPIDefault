@@ -18,42 +18,54 @@ namespace DotNetWebAPIDefault.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var todosLists = _context.TodoLists.ToList().Select(s => s.ToTodoListDto());
-            return Ok(todosLists);
+            var todosLists = await _context.TodoLists.ToListAsync();
+            var todoListDto = todosLists.Select(s => s.ToTodoListDto());
+            return Ok(todoListDto);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById([FromRoute] int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var todoList = _context.TodoLists.Find(id);
+            var todoList = await _context.TodoLists.FindAsync(id);
             if (todoList == null) return NotFound();
 
             return Ok(todoList.ToTodoListDto());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] CreateTodoListRequestDto todoListDto)
+        public async Task<IActionResult> Create([FromBody] CreateTodoListRequestDto todoListDto)
         {
             var todoList = todoListDto.toTodoListFromCreate();
-            _context.TodoLists.Add(todoList);
-            _context.SaveChanges();
+            await _context.TodoLists.AddAsync(todoList);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetById), new { id = todoList.Id }, todoList.ToTodoListDto());
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] UpdateTodoListRequestDto update)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoListRequestDto update)
         {
-            var todoList = _context.TodoLists.FirstOrDefault(x => x.Id == id);
+            var todoList = await _context.TodoLists.FirstOrDefaultAsync(x => x.Id == id);
 
             if (todoList == null) return NotFound();
 
             todoList.Name = update.Name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return Ok(todoList.ToTodoListDto());
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var todoList = await  _context.TodoLists.FirstOrDefaultAsync(x => x.Id == id);
+            if (todoList == null) return NotFound();
+
+            _context.Remove(todoList);
+            await _context.SaveChangesAsync();
+
+            return NoContent(); //Default for Delete Response oK
+        }
     }
 }
