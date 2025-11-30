@@ -1,6 +1,8 @@
 using DotNetWebAPIDefault.Data;
+using DotNetWebAPIDefault.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DotNetWebAPIDefault.Controllers
 {
@@ -16,7 +18,7 @@ namespace DotNetWebAPIDefault.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var todosLists = _context.TodoLists.ToList();
+            var todosLists = _context.TodoLists.ToList().Select(s => s.ToTodoListDto());
             return Ok(todosLists);
         }
 
@@ -26,7 +28,7 @@ namespace DotNetWebAPIDefault.Controllers
             var todoList = _context.TodoLists.Find(id);
             if (todoList == null) return NotFound();
 
-            return Ok(todoList);
+            return Ok(todoList.ToTodoListDto());
         }
     }
 }
