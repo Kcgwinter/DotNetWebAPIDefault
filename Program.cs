@@ -2,6 +2,7 @@ using DotNetWebAPIDefault.Data;
 using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Models;
 using DotNetWebAPIDefault.Repository;
+using DotNetWebAPIDefault.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+
 });
 
 builder.Services.AddControllers();
@@ -65,6 +67,8 @@ builder.Services.AddAuthentication(options =>
     };
 }
 );
+
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 
 

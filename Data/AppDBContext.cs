@@ -3,6 +3,7 @@ using DotNetWebAPIDefault.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DotNetWebAPIDefault.Data;
 
@@ -28,6 +29,12 @@ public class AppDBContext : IdentityDbContext<AppUser>
 
         builder.Entity<IdentityRole>().HasData(roles);
 
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.ConfigureWarnings(warnings =>
+            warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
     }
 
 }

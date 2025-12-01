@@ -1,4 +1,5 @@
 using DotNetWebAPIDefault.DTOs.Account;
+using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -6,30 +7,46 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetWebAPIDefault.Controllers
 {
-    public class AccountController(UserManager<AppUser> userManager) : BaseApiController
+    public class AccountController(UserManager<AppUser> userManager, ITokenService tokenService) : BaseApiController
     {
         private readonly UserManager<AppUser> _userManager = userManager;
+        private readonly ITokenService _tokenService = tokenService;
 
         [HttpPost("{register}")]
         public async Task<IActionResult> Register(DTOs.Account.RegisterDto model)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var appUser = new AppUser
+            try
             {
-                UserName = model.Username,
-                Email = model.Email,
+                if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            };
-            var createUser = await _userManager.CreateAsync(appUser, model.Password);
+                var appUser = new AppUser
+                {
+                    UserName = model.Username,
+                    Email = model.Email,
 
-            if (createUser.Succeeded)
-            {
-                var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+                };
+                var createUser = await _userManager.CreateAsync(appUser, model.Password);
 
-                if (roleResult.Succeeded) return Ok("User Created and added to role User");
+                if (createUser.Succeeded)
+                {
+                    var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
+
+                    if (roleResult.Succeeded)
+                    {
+                        new CreateUserDto
+                        {
+                            Username  = appUser.UserName,
+                            Email  =  appUser.Email,
+                            Token  = _tokenService.CreateToken(appUser)
+                        };
+                    }
+                }
+                return BadRequest("Error creating User");
             }
-            return BadRequest("Error creating User");
+            catch (System.Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
