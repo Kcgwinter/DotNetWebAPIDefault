@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
+builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
 
 

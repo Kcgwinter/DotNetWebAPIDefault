@@ -3,62 +3,53 @@ using DotNetWebAPIDefault.Data;
 using DotNetWebAPIDefault.DTOs.Todo;
 using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace DotNetWebAPIDefault.Repository;
 
-public class TodoListRepository(AppDBContext context) : ITodoListRepository
+public class TodoRepository(AppDBContext context) : ITodoRepository
 {
+
     private readonly AppDBContext _context = context;
 
 
-    public async Task<List<TodoList>> GetAllAsync()
+    public async Task<List<Todo>> GetAllAsync()
     {
-        return await _context.TodoLists.ToListAsync();
+        return await _context.Todos.ToListAsync();
     }
 
-    public async Task<TodoList?> GetByIdAsync(int id)
+    public async Task<Todo?> GetByIdAsync(int id)
     {
-        return await _context.TodoLists.FindAsync(id);
-
+        return await _context.Todos.FindAsync(id);
     }
 
-
-    public async Task<bool> delete(TodoList todoList)
+    public async Task<Todo> CreateAsync(Todo todoModel)
     {
-
-        return true;
-    }
-
-    public async Task<TodoList> CreateAsync(TodoList todoListModel)
-    {
-        await _context.TodoLists.AddAsync(todoListModel);
+        await _context.Todos.AddAsync(todoModel);
         await _context.SaveChangesAsync();
-        return todoListModel;
+        return todoModel;
     }
 
-    public async Task<TodoList?> UpdateAsync(int id, UpdateTodoListRequestDto todolistDto)
+    public async Task<Todo?> UpdateAsync(int id, UpdateTodoRequestDto todoDto)
     {
-        var existingTodoList = await _context.TodoLists.FirstOrDefaultAsync(x => x.Id == id);
-
-        if (existingTodoList == null) return null;
-
-        existingTodoList.Name = todolistDto.Name;
-
+        var existingTodo = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+        if (existingTodo is null) return null;
+        existingTodo.Name = todoDto.Name;
+        existingTodo.Description = todoDto.Description;
+        existingTodo.finished = todoDto.finished;
         await _context.SaveChangesAsync();
-
-        return existingTodoList;
+        return existingTodo;
 
     }
 
-    public async Task<TodoList?> DeleteAsync(int id)
+    public async Task<Todo?> DeleteAsync(int id)
     {
-        var todoListModel = await GetByIdAsync(id);
-        if (todoListModel == null) return null;
-        _context.TodoLists.Remove(todoListModel);
+        var todoModel = await GetByIdAsync(id);
+        if(todoModel is null) return null;
+        _context.Todos.Remove(todoModel);
+
         await _context.SaveChangesAsync();
 
-        return todoListModel;
+        return todoModel;
     }
 }
