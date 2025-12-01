@@ -1,10 +1,15 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DotNetWebAPIDefault.DTOs.Todo;
 
 public class CreateTodoDto
 {
+    [Required]
+    [MinLength(5, ErrorMessage = "Name must be at least 5 characters long")]
+    [MaxLength(200, ErrorMessage = "Name must be at least 5 characters long")]
     public required string Name { get; set; }
+    [Required]
     public required string Description { get; set; }
     public bool finished { get; set; } = false;
 
