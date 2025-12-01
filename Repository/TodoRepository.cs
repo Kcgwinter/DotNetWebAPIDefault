@@ -30,10 +30,11 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
         return todoModel;
     }
 
-    public async Task<Todo?> UpdateAsync(int id, UpdateTodoRequestDto todoDto)
+    public async Task<Todo?> UpdateAsync(int id, Todo todoDto)
     {
         var existingTodo = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
         if (existingTodo is null) return null;
+
         existingTodo.Name = todoDto.Name;
         existingTodo.Description = todoDto.Description;
         existingTodo.finished = todoDto.finished;
@@ -44,7 +45,7 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
 
     public async Task<Todo?> DeleteAsync(int id)
     {
-        var todoModel = await GetByIdAsync(id);
+        var todoModel = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
         if(todoModel is null) return null;
         _context.Todos.Remove(todoModel);
 

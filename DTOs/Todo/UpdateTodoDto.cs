@@ -2,8 +2,9 @@ using System;
 
 namespace DotNetWebAPIDefault.DTOs.Todo;
 
-public class CreateTodoRequestDto
+public class UpdateTodoDto
 {
+
     public required string Name { get; set; }
     public required string Description { get; set; }
     public bool finished { get; set; } = false;

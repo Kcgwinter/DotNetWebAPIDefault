@@ -11,4 +11,6 @@ public interface ITodoListRepository
     Task<TodoList> CreateAsync(TodoList todoListModel);
     Task<TodoList?> UpdateAsync(int id, UpdateTodoListRequestDto todolistDto);
     Task<TodoList?> DeleteAsync(int id);
+
+    Task<bool> TodoListExists(int id);
 }

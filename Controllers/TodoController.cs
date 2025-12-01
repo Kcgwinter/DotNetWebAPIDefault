@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetWebAPIDefault.Controllers
 {
-    public class TodoController(ITodoRepository todoRepo, Data.AppDBContext context) : BaseApiController
+    public class TodoController(ITodoRepository todoRepo, Data.AppDBContext context, ITodoListRepository todolistRepo) : BaseApiController
     {
 
         private readonly Data.AppDBContext _context = context;
         private readonly ITodoRepository _todoRepo = todoRepo;
+        private readonly ITodoListRepository _todolistRepo = todolistRepo;
 
         [HttpGet]
         public async Task<ActionResult> GetAll()
@@ -28,19 +29,22 @@ namespace DotNetWebAPIDefault.Controllers
             return Ok(todo.ToTodoDto());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTodoRequestDto todoDto)
+        [HttpPost("{todoListId}")]
+        public async Task<IActionResult> Create([FromRoute] int todoListId, [FromBody] CreateTodoDto todoDto)
         {
-            var todo = todoDto.toTodoFromCreate();
-            await _context.Todos.AddAsync(todo);
+            if(!await _todolistRepo.TodoListExists(todoListId)) return BadRequest("Todolist does not exists");
+
+            var todo = todoDto.toTodoFromCreate(todoListId);
+            await _todoRepo.CreateAsync(todo);
             return CreatedAtAction(nameof(GetById), new { id = todo.Id }, todo.ToTodoDto());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoRequestDto update)
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoDto update)
         {
-            var existingTodo = await _todoRepo.UpdateAsync(id, update);
-            if (existingTodo == null) return NotFound();
+
+            var existingTodo = await _todoRepo.UpdateAsync(id, update.toTodoFromUpdate());
+            if (existingTodo == null) return NotFound("Todo not found");
 
             return Ok(existingTodo.ToTodoDto());
         }
@@ -49,7 +53,7 @@ namespace DotNetWebAPIDefault.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var todo = await _todoRepo.DeleteAsync(id);
-            if (todo == null) return NotFound();
+            if (todo == null) return NotFound("Comment not found");
             return NoContent(); //Default for Delete Response oK
         }
     }

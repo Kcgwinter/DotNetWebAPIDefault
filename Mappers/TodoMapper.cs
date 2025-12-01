@@ -18,13 +18,26 @@ public static class TodoMapper
     }
 
 
-    public static Todo toTodoFromCreate(this CreateTodoRequestDto createTodoListDto)
+    public static Todo toTodoFromCreate(this CreateTodoDto todoDto, int todoListId)
     {
         return new Todo
         {
-            Name = createTodoListDto.Name,
-            Description = createTodoListDto.Description,
-            finished = createTodoListDto.finished
+            Name = todoDto.Name,
+            Description = todoDto.Description,
+            finished = todoDto.finished,
+            TodoListId = todoListId
+
+        };
+    }
+    
+    public static Todo toTodoFromUpdate(this UpdateTodoDto todoDto)
+    {
+        return new Todo
+        {
+            Name = todoDto.Name,
+            Description = todoDto.Description,
+            finished = todoDto.finished,
+
         };
     }
 }

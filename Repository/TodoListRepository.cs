@@ -15,15 +15,13 @@ public class TodoListRepository(AppDBContext context) : ITodoListRepository
 
     public async Task<List<TodoList>> GetAllAsync()
     {
-        return await _context.TodoLists.ToListAsync();
+        return await _context.TodoLists.Include(t => t.Todos).ToListAsync();
     }
 
     public async Task<TodoList?> GetByIdAsync(int id)
     {
-        return await _context.TodoLists.FindAsync(id);
-
+        return await _context.TodoLists.Include(t => t.Todos).FirstOrDefaultAsync(x => x.Id == id);
     }
-
 
     public async Task<TodoList> CreateAsync(TodoList todoListModel)
     {
@@ -48,11 +46,16 @@ public class TodoListRepository(AppDBContext context) : ITodoListRepository
 
     public async Task<TodoList?> DeleteAsync(int id)
     {
-        var todoListModel = await GetByIdAsync(id);
+        var todoListModel = await _context.TodoLists.FirstOrDefaultAsync(x => x.Id == id);
         if (todoListModel == null) return null;
         _context.TodoLists.Remove(todoListModel);
         await _context.SaveChangesAsync();
 
         return todoListModel;
+    }
+
+    public Task<bool> TodoListExists(int id)
+    {
+        return _context.TodoLists.AnyAsync(x => x.Id == id);
     }
 }
