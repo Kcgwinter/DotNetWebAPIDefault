@@ -1,6 +1,7 @@
 using System;
 using DotNetWebAPIDefault.Data;
 using DotNetWebAPIDefault.DTOs.Todo;
+using DotNetWebAPIDefault.Helpers;
 using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,18 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
     private readonly AppDBContext _context = context;
 
 
-    public async Task<List<Todo>> GetAllAsync()
+    public async Task<List<Todo>> GetAllAsync(QueryObject query)
     {
-        return await _context.Todos.ToListAsync();
+        var todos = _context.Todos.AsQueryable();
+        if (!string.IsNullOrWhiteSpace(query.Name))
+            todos = todos.Where(t => t.Name.Contains(query.Name));
+
+        if(!query.Finished == null)
+        {
+            todos = todos.Where(t => t.finished == query.Finished);
+        }
+
+        return await todos.ToListAsync();
     }
 
     public async Task<Todo?> GetByIdAsync(int id)
@@ -46,7 +56,7 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
     public async Task<Todo?> DeleteAsync(int id)
     {
         var todoModel = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
-        if(todoModel is null) return null;
+        if (todoModel is null) return null;
         _context.Todos.Remove(todoModel);
 
         await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 using DotNetWebAPIDefault.DTOs.Todo;
+using DotNetWebAPIDefault.Helpers;
 using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Mappers;
 using Microsoft.AspNetCore.Http;
@@ -14,11 +15,11 @@ namespace DotNetWebAPIDefault.Controllers
         private readonly ITodoListRepository _todolistRepo = todolistRepo;
 
         [HttpGet]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll([FromQuery]QueryObject query)
         {
             if(!ModelState.IsValid) return BadRequest(ModelState); 
             
-            var todos = await _todoRepo.GetAllAsync();
+            var todos = await _todoRepo.GetAllAsync(query);
             var todoDto = todos.Select(s => s.ToTodoDto());
             return Ok(todoDto);
         }
