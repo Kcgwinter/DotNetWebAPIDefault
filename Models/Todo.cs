@@ -1,7 +1,9 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNetWebAPIDefault.Models;
 
+[Table("Todos")]
 public class Todo : BaseModel
 {
     public required string Name { get; set; }
@@ -11,5 +13,6 @@ public class Todo : BaseModel
     // Realationship (Reverse to TodoList)
     public int? TodoListId { get; set; }
     public TodoList? TodoList { get; set; }
+
 
 }
