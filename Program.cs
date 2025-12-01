@@ -1,6 +1,8 @@
 using DotNetWebAPIDefault.Data;
 using DotNetWebAPIDefault.Interfaces;
+using DotNetWebAPIDefault.Models;
 using DotNetWebAPIDefault.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -25,6 +27,19 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
 });
+
+// Auth
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+}).AddEntityFrameworkStores<AppDBContext>();
+
+builder.Services.AddAuthentication();
+
 
 var app = builder.Build();
 

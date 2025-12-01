@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "P9AOP4jXaPU=",
+  "dgSpecHash": "IVizksf6fWY=",
   "success": true,
   "projectFilePath": "F:\\Dev\\DotNetWebAPIDefault\\DotNetWebAPIDefault.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\kcgwi\\.nuget\\packages\\azure.identity\\1.14.2\\azure.identity.1.14.2.nupkg.sha512",
     "C:\\Users\\kcgwi\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\kcgwi\\.nuget\\packages\\identity.core\\1.2.7\\identity.core.1.2.7.nupkg.sha512",
+    "C:\\Users\\kcgwi\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\10.0.0\\microsoft.aspnetcore.identity.entityframeworkcore.10.0.0.nupkg.sha512",
     "C:\\Users\\kcgwi\\.nuget\\packages\\microsoft.aspnetcore.jsonpatch\\10.0.0\\microsoft.aspnetcore.jsonpatch.10.0.0.nupkg.sha512",
     "C:\\Users\\kcgwi\\.nuget\\packages\\microsoft.aspnetcore.mvc.newtonsoftjson\\10.0.0\\microsoft.aspnetcore.mvc.newtonsoftjson.10.0.0.nupkg.sha512",
     "C:\\Users\\kcgwi\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.0\\microsoft.aspnetcore.openapi.10.0.0.nupkg.sha512",
