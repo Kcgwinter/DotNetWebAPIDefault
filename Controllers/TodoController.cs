@@ -7,10 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetWebAPIDefault.Controllers
 {
-    public class TodoController(ITodoRepository todoRepo, Data.AppDBContext context, ITodoListRepository todolistRepo) : BaseApiController
+    public class TodoController(ITodoRepository todoRepo, ITodoListRepository todolistRepo) : BaseApiController
     {
-
-        private readonly Data.AppDBContext _context = context;
         private readonly ITodoRepository _todoRepo = todoRepo;
         private readonly ITodoListRepository _todolistRepo = todolistRepo;
 
