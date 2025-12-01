@@ -12,40 +12,49 @@ namespace DotNetWebAPIDefault.Controllers
         private readonly UserManager<AppUser> _userManager = userManager;
         private readonly ITokenService _tokenService = tokenService;
 
-        [HttpPost("{register}")]
-        public async Task<IActionResult> Register(DTOs.Account.RegisterDto model)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
                 var appUser = new AppUser
                 {
-                    UserName = model.Username,
-                    Email = model.Email,
-
+                    UserName = registerDto.Username,
+                    Email = registerDto.Email
                 };
-                var createUser = await _userManager.CreateAsync(appUser, model.Password);
 
-                if (createUser.Succeeded)
+                var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
+
+                if (createdUser.Succeeded)
                 {
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
-
                     if (roleResult.Succeeded)
                     {
-                        new CreateUserDto
-                        {
-                            Username  = appUser.UserName,
-                            Email  =  appUser.Email,
-                            Token  = _tokenService.CreateToken(appUser)
-                        };
+                        return Ok(
+                            new CreateUserDto
+                            {
+                                Username = appUser.UserName,
+                                Email = appUser.Email,
+                                Token = _tokenService.CreateToken(appUser)
+                            }
+                        );
+                    }
+                    else
+                    {
+                        return StatusCode(500, roleResult.Errors);
                     }
                 }
-                return BadRequest("Error creating User");
+                else
+                {
+                    return StatusCode(500, createdUser.Errors);
+                }
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
-                return BadRequest(e.Message);
+                return StatusCode(500, e);
             }
         }
     }
