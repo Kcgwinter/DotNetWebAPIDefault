@@ -13,4 +13,6 @@ public class TodoDto
 
     // Realationship (Reverse to TodoList)
     public int? TodoListId { get; set; }
+
+    public string CreatedBy { get; set; }
 }

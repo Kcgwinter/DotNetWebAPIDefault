@@ -8,6 +8,7 @@ public interface ITodoListRepository
 {
     Task<List<TodoList>> GetAllAsync();
     Task<TodoList?> GetByIdAsync(int id);
+    Task<TodoList?> GetByNameAsync(string name);
     Task<TodoList> CreateAsync(TodoList todoListModel);
     Task<TodoList?> UpdateAsync(int id, UpdateTodoListRequestDto todolistDto);
     Task<TodoList?> DeleteAsync(int id);

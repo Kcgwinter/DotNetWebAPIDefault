@@ -26,6 +26,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+builder.Services.AddScoped<IUserTodoListRepository, UserTodoListRepository>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {

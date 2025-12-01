@@ -15,7 +15,7 @@ public class TodoListRepository(AppDBContext context) : ITodoListRepository
 
     public async Task<List<TodoList>> GetAllAsync()
     {
-        return await _context.TodoLists.Include(t => t.Todos).ToListAsync();
+        return await _context.TodoLists.Include(t => t.Todos).ThenInclude(a => a.AppUser).ToListAsync();
     }
 
     public async Task<TodoList?> GetByIdAsync(int id)
@@ -57,5 +57,10 @@ public class TodoListRepository(AppDBContext context) : ITodoListRepository
     public Task<bool> TodoListExists(int id)
     {
         return _context.TodoLists.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<TodoList?> GetByNameAsync(string name)
+    {
+        return await _context.TodoLists.FirstOrDefaultAsync(x =>x.Name == name);
     }
 }

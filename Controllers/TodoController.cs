@@ -1,22 +1,27 @@
 using DotNetWebAPIDefault.DTOs.Todo;
+using DotNetWebAPIDefault.Extensions;
 using DotNetWebAPIDefault.Helpers;
 using DotNetWebAPIDefault.Interfaces;
 using DotNetWebAPIDefault.Mappers;
+using DotNetWebAPIDefault.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetWebAPIDefault.Controllers
 {
-    public class TodoController(ITodoRepository todoRepo, ITodoListRepository todolistRepo) : BaseApiController
+    public class TodoController(ITodoRepository todoRepo, ITodoListRepository todolistRepo, UserManager<AppUser> userManager) : BaseApiController
     {
         private readonly ITodoRepository _todoRepo = todoRepo;
         private readonly ITodoListRepository _todolistRepo = todolistRepo;
+        private readonly UserManager<AppUser> _userManager = userManager;
 
         [HttpGet]
-        public async Task<ActionResult> GetAll([FromQuery]QueryObject query)
+        public async Task<ActionResult> GetAll([FromQuery] QueryObject query)
         {
-            if(!ModelState.IsValid) return BadRequest(ModelState); 
-            
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
             var todos = await _todoRepo.GetAllAsync(query);
             var todoDto = todos.Select(s => s.ToTodoDto());
             return Ok(todoDto);
@@ -31,11 +36,17 @@ namespace DotNetWebAPIDefault.Controllers
         }
 
         [HttpPost("{todoListId:int}")]
+        [Authorize]
         public async Task<IActionResult> Create([FromRoute] int todoListId, [FromBody] CreateTodoDto todoDto)
         {
-            if(!await _todolistRepo.TodoListExists(todoListId)) return BadRequest("Todolist does not exists");
+            if (!await _todolistRepo.TodoListExists(todoListId)) return BadRequest("Todolist does not exists");
+
+
+            var username = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(username);
 
             var todo = todoDto.toTodoFromCreate(todoListId);
+            todo.AppUserId = appUser.Id;
             await _todoRepo.CreateAsync(todo);
             return CreatedAtAction(nameof(GetById), new { id = todo.Id }, todo.ToTodoDto());
         }

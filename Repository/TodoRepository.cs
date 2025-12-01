@@ -16,7 +16,7 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
 
     public async Task<List<Todo>> GetAllAsync(QueryObject query)
     {
-        var todos = _context.Todos.AsQueryable();
+        var todos = _context.Todos.Include(c => c.AppUser).AsQueryable();
         if (!string.IsNullOrWhiteSpace(query.Name))
             todos = todos.Where(t => t.Name.Contains(query.Name));
 
@@ -30,7 +30,7 @@ public class TodoRepository(AppDBContext context) : ITodoRepository
 
     public async Task<Todo?> GetByIdAsync(int id)
     {
-        return await _context.Todos.FindAsync(id);
+        return await _context.Todos.Include(c => c.AppUser).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<Todo> CreateAsync(Todo todoModel)

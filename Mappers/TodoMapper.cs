@@ -13,7 +13,10 @@ public static class TodoMapper
             Id = todoModel.Id,
             Name = todoModel.Name,
             Description = todoModel.Description,
-            finished = todoModel.finished
+            finished = todoModel.finished,
+            CreatedBy = todoModel.AppUser.UserName,
+            TodoListId = todoModel.TodoListId,
+
         };
     }
 
