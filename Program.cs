@@ -1,4 +1,6 @@
 using DotNetWebAPIDefault.Data;
+using DotNetWebAPIDefault.Interfaces;
+using DotNetWebAPIDefault.Repository;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -15,6 +17,9 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 });
 
 builder.Services.AddControllers();
+
+builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
+
 
 
 var app = builder.Build();
