@@ -7,5 +7,8 @@ namespace DotNetWebAPIDefault.Controllers
     [ApiController]
     public class BaseApiController : ControllerBase
     {
+        //add logic here for later
+
+        
     }
 }
