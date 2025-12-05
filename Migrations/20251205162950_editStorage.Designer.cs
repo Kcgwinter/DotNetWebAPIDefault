@@ -4,6 +4,7 @@ using DotNetWebAPIDefault.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetWebAPIDefault.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251205162950_editStorage")]
+    partial class editStorage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,6 +109,7 @@ namespace DotNetWebAPIDefault.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Line2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -228,15 +232,15 @@ namespace DotNetWebAPIDefault.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6d6239cc-8fdd-46ae-8a3a-86ad1159441e",
-                            ConcurrencyStamp = "99d88cf3-3041-4d76-b110-14add86993cd",
+                            Id = "3e6554ac-3f52-47d3-a1fb-8642e5b52910",
+                            ConcurrencyStamp = "2a2f11e4-8883-4f19-8d1d-aa82b45267a1",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6ba799ef-50d6-4c93-af0f-03ac6949b53b",
-                            ConcurrencyStamp = "36fb099a-4c23-4c19-8efa-8f11b51e0faf",
+                            Id = "328e599e-b897-4537-877a-53d9301a82fb",
+                            ConcurrencyStamp = "4661597b-48ad-4e90-b389-2bac6984ca50",
                             Name = "User",
                             NormalizedName = "USER"
                         });
