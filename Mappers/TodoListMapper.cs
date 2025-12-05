@@ -12,7 +12,7 @@ public static class TodoListMapper
         {
             Id = todoListModel.Id,
             Name = todoListModel.Name,
-            Todos = todoListModel.Todos!.Select( c => c.ToTodoDto()).ToList()
+            Todos = todoListModel == null ? todoListModel.Todos.Select(c => c.ToTodoDto()).ToList() : null,
         };
     }
 

@@ -51,6 +51,7 @@ namespace DotNetWebAPIDefault.Controllers
 
             todo.AppUserId = appUser.Id;
             await _todoRepo.CreateAsync(todo);
+            
             return CreatedAtAction(nameof(GetById), new { id = todo.Id }, todo.ToTodoDto());
         }
 

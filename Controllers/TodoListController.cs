@@ -36,6 +36,7 @@ namespace DotNetWebAPIDefault.Controllers
         {
             var todoList = todoListDto.toTodoListFromCreate();
             await _context.TodoLists.AddAsync(todoList);
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = todoList.Id }, todoList.ToTodoListDto());
         }
 
@@ -43,6 +44,7 @@ namespace DotNetWebAPIDefault.Controllers
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] UpdateTodoListRequestDto update)
         {
             var existingTodoList = await _todoListRepo.UpdateAsync(id, update);
+            await _context.SaveChangesAsync();
             if (existingTodoList == null) return NotFound();
 
             return Ok(existingTodoList.ToTodoListDto());
@@ -52,6 +54,7 @@ namespace DotNetWebAPIDefault.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var todoList = await _todoListRepo.DeleteAsync(id);
+            await _context.SaveChangesAsync();
             if (todoList == null) return NotFound();
             return NoContent(); //Default for Delete Response oK
         }
