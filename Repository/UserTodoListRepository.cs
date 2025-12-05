@@ -23,7 +23,7 @@ public class UserTodoListRepository(AppDBContext context) : IUserTodoListReposit
     public async Task<UserTodoList> DeleteAsync(AppUser user, string name)
     {
         var userTodoListModel = await _context.UserTodoLists.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.TodoList!.Name.ToLower() == name.ToLower());
-        if(userTodoListModel == null) return null;
+        if(userTodoListModel == null) throw new NotImplementedException(); //TODO: Fix throw not implemented exception
 
         _context.UserTodoLists.Remove(userTodoListModel);
         await _context.SaveChangesAsync();
