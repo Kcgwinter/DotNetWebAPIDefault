@@ -15,7 +15,7 @@ public class TodoListRepository(AppDBContext context) : ITodoListRepository
 
     public async Task<List<TodoList>> GetAllAsync()
     {
-        return await _context.TodoLists.Include(t => t.Todos).ThenInclude(a => a.AppUser).ToListAsync();
+        return await _context.TodoLists.Include(t => t.Todos!).ThenInclude(a => a.AppUser).ToListAsync();
     }
 
     public async Task<TodoList?> GetByIdAsync(int id)

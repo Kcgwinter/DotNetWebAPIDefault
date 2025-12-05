@@ -26,7 +26,7 @@ namespace DotNetWebAPIDefault.Controllers
         {
             var username = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(username);
-
+            if (appUser == null) return BadRequest("Error get User TodoList");
             var userTodoLists = await _userTodoListRepository.GetTodoLists(appUser);
 
             return Ok(userTodoLists);
@@ -41,6 +41,8 @@ namespace DotNetWebAPIDefault.Controllers
             var todoList = await _todoListRepository.GetByNameAsync(todoListName);
 
             if (todoList == null) return NotFound("Todo list not found");
+
+            if (appUser == null) return BadRequest("User not existence");
 
             var userTodoList = await _userTodoListRepository.GetTodoLists(appUser);
 
@@ -71,7 +73,9 @@ namespace DotNetWebAPIDefault.Controllers
         public async Task<IActionResult> DeleteAsync(string todoListName)
         {
             var username = User.GetUsername();
-            var appUser = await _userManager.FindByNameAsync(username);
+            var appUser = await _userManager.FindByNameAsync(username!);
+            if (appUser == null) return BadRequest("Error delete UserTodoList");
+            
             var todoList = await _userTodoListRepository.GetTodoLists(appUser);
 
             var filterUserTodoList = todoList.Where(x => x.Name.ToLower() == todoListName.ToLower());

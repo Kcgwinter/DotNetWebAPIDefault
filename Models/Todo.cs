@@ -14,8 +14,8 @@ public class Todo : BaseModel
     public int? TodoListId { get; set; }
     public TodoList? TodoList { get; set; }
 
-    public string AppUserId {get; set;}
-    public AppUser AppUser { get; set; }
+    public string? AppUserId {get; set;}
+    public AppUser? AppUser { get; set; }
 
 
 }

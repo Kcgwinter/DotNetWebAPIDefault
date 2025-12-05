@@ -28,6 +28,9 @@ namespace DotNetWebAPIDefault.Controllers
                     Email = registerDto.Email
                 };
 
+
+                if (registerDto.Password == null) return BadRequest("Internal Error");
+
                 var createdUser = await _userManager.CreateAsync(appUser, registerDto.Password);
 
                 if (createdUser.Succeeded)
@@ -35,6 +38,7 @@ namespace DotNetWebAPIDefault.Controllers
                     var roleResult = await _userManager.AddToRoleAsync(appUser, "User");
                     if (roleResult.Succeeded)
                     {
+                        if (appUser.UserName == null || appUser.Email == null) return BadRequest("User creation error");
                         return Ok(
                             new CreateUserDto
                             {
@@ -67,12 +71,15 @@ namespace DotNetWebAPIDefault.Controllers
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user == null) return Unauthorized("Invalid User");
+            if (loginDto.Password == null) return BadRequest("Internal Error");
 
             var result = await _singinManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded) return Unauthorized();
 
+            if (user.UserName == null || user.Email == null) return BadRequest("Login error");
             return Ok(
+
                 new CreateUserDto
                 {
                     Username = user.UserName,

@@ -22,7 +22,7 @@ public class UserTodoListRepository(AppDBContext context) : IUserTodoListReposit
 
     public async Task<UserTodoList> DeleteAsync(AppUser user, string name)
     {
-        var userTodoListModel = await _context.UserTodoLists.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.TodoList.Name.ToLower() == name.ToLower());
+        var userTodoListModel = await _context.UserTodoLists.FirstOrDefaultAsync(x => x.AppUserId == user.Id && x.TodoList!.Name.ToLower() == name.ToLower());
         if(userTodoListModel == null) return null;
 
         _context.UserTodoLists.Remove(userTodoListModel);
@@ -36,7 +36,7 @@ public class UserTodoListRepository(AppDBContext context) : IUserTodoListReposit
         return await _context.UserTodoLists.Where(u => u.AppUserId == user.Id).Select(tl => new TodoList
         {
             Id = tl.TodoListId,
-            Name = tl.TodoList.Name
+            Name = tl.TodoList!.Name
 
         }).ToListAsync();
     }

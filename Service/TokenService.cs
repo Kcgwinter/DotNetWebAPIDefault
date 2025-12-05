@@ -11,10 +11,15 @@ namespace DotNetWebAPIDefault.Service;
 public class TokenService(IConfiguration config) : ITokenService
 {
     private readonly IConfiguration _config = config;
-    private readonly SymmetricSecurityKey _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SigningKey"]));
+    private readonly SymmetricSecurityKey _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:SigningKey"]!));
 
     public string CreateToken(AppUser user)
     {
+
+        //TODO throw notimplemented fix
+        if(user == null) throw new NotImplementedException();
+            
+        if(user.Email == null || user.UserName == null) throw new NotImplementedException();
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Email, user.Email),

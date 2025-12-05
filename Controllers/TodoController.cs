@@ -46,6 +46,9 @@ namespace DotNetWebAPIDefault.Controllers
             var appUser = await _userManager.FindByNameAsync(username);
 
             var todo = todoDto.toTodoFromCreate(todoListId);
+
+            if (appUser == null) return BadRequest("Erro create todolist");
+
             todo.AppUserId = appUser.Id;
             await _todoRepo.CreateAsync(todo);
             return CreatedAtAction(nameof(GetById), new { id = todo.Id }, todo.ToTodoDto());

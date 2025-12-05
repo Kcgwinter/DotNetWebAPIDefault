@@ -14,7 +14,7 @@ public static class TodoMapper
             Name = todoModel.Name,
             Description = todoModel.Description,
             finished = todoModel.finished,
-            CreatedBy = todoModel.AppUser.UserName,
+            CreatedBy = todoModel.AppUser!.UserName,
             TodoListId = todoModel.TodoListId,
 
         };

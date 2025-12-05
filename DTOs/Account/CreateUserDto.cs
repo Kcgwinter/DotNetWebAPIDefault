@@ -1,10 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DotNetWebAPIDefault.DTOs.Account;
 
 public class CreateUserDto
 {
-public string Username { get; set; }
-public string Email { get; set; }
-public string Token { get; set; }
+    public required string Username { get; set; }
+    public required string Email { get; set; }
+    public required string Token { get; set; }
 }

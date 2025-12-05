@@ -6,8 +6,8 @@ namespace DotNetWebAPIDefault.Models;
 [Table("UserTodoList")]
 public class UserTodoList
 {
-    public string AppUserId { get; set; }
+    public required string AppUserId { get; set; }
     public int TodoListId { get; set; }
-    public AppUser AppUser { get; set; }
-    public TodoList TodoList { get; set; }
+    public AppUser? AppUser { get; set; }
+    public TodoList? TodoList { get; set; }
 }
