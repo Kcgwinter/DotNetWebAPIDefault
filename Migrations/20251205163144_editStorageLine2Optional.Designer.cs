@@ -4,6 +4,7 @@ using DotNetWebAPIDefault.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetWebAPIDefault.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20251205163144_editStorageLine2Optional")]
+    partial class editStorageLine2Optional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,15 +231,15 @@ namespace DotNetWebAPIDefault.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6d6239cc-8fdd-46ae-8a3a-86ad1159441e",
-                            ConcurrencyStamp = "99d88cf3-3041-4d76-b110-14add86993cd",
+                            Id = "6cd2b7b9-8016-44b9-adc6-4423b8ee5cfb",
+                            ConcurrencyStamp = "740b4160-a26c-415a-8eec-eb6635bdd02f",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "6ba799ef-50d6-4c93-af0f-03ac6949b53b",
-                            ConcurrencyStamp = "36fb099a-4c23-4c19-8efa-8f11b51e0faf",
+                            Id = "f18e4106-84c2-425a-9f56-17793e1a3a14",
+                            ConcurrencyStamp = "4ffd95a3-22dc-4f11-9d10-aa8392b5c66b",
                             Name = "User",
                             NormalizedName = "USER"
                         });

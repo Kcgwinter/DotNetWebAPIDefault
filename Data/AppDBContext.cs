@@ -17,6 +17,7 @@ public class AppDBContext : IdentityDbContext<AppUser>
     public DbSet<Todo> Todos { get; set; }
     public DbSet<TodoList> TodoLists { get; set; }
     public DbSet<UserTodoList> UserTodoLists { get; set; }
+    public DbSet<Storage> Storages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -30,7 +31,7 @@ public class AppDBContext : IdentityDbContext<AppUser>
 
         builder.Entity<IdentityRole>().HasData(roles);
 
-        builder.Entity<UserTodoList>(x => x.HasKey(p => new {p.AppUserId, p.TodoListId }));
+        builder.Entity<UserTodoList>(x => x.HasKey(p => new { p.AppUserId, p.TodoListId }));
         builder.Entity<UserTodoList>()
         .HasOne(u => u.AppUser)
         .WithMany(u => u.TodoLists)
