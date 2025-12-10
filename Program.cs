@@ -27,7 +27,6 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<ITodoListRepository, TodoListRepository>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 builder.Services.AddScoped<IUserTodoListRepository, UserTodoListRepository>();
-builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
@@ -71,8 +70,6 @@ builder.Services.AddAuthentication(options =>
 );
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-
-
 
 var app = builder.Build();
 
